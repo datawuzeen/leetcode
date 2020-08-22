@@ -1,5 +1,5 @@
 
-题目：
+题目一：找出数组中重复的数字
     在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
 解决方法：
 方法一：
@@ -39,4 +39,46 @@
      }
      
      注意：while(i != nums[i])的T(n)~O(k)
+
+题目二：不修改数组找出重复的数字
+    在一个长度为n+1的数组里的所有数字都在1~n的范围内，所以数组中至少有一个数字是重复的。在不修改数组的情况下，找出任意一个重复数字。
+方法：
+    二分查找。
+    二分查找的过程中，但是每次查找范围。选择折半区间方法：看数组在该区间的元素数量，如果数量超过区间数目，则该区间内存在重复元素，否则，在另一个区间。
+代码：
+    public int getDuplication(int[] nums){
+        int len = nums.length;
+        //边界条件-空数组
+        if(len <= 0) return -1;
+        
+        //二分查找
+        int l = 0;
+        int r = len - 1;
+        while(l <= r){
+            //区间更新
+            int m = (r - l) / 2 + l;
+            int cnt = countRange(nums,len,l,m);
+            //结果1-二分查找到最后
+            if(r == l){
+                if(cnt > 1) return l;
+                else break;
+            }
+            //结果2-查找过程中属于区间的元素数量大于区间大小
+            if(cnt > r - l + 1) r = m;
+            else l = m + 1;
+        }
+        return -1;
+    }
+    //定义函数-数组属于某区间的元素数量
+    int countRange(int[] nums, int start, int end){
+        int len = nums.length;
+        int count = 0;
+        for(int i = 0; i < len; i++)
+        {
+            if(nums[i] >= start && nums[i] <= end) count++;
+        }
+        return count;
+    }
+    
+
     
